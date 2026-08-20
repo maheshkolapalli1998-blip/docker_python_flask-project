@@ -1,0 +1,41 @@
+name: CI/CD - Build and Run Docker
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout source code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Set up Docker Buildx
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # 3. Build Docker image
+      - name: Build Docker image
+        run: |
+          docker build \
+            -t nit-app:latest \
+            .
+
+      # 4. Run Docker container
+      - name: Run Docker container
+        run: |
+          docker run \
+            --name nit-app \
+            --rm \
+            nit-app:latest
+
+      # 5. Show Docker image
+      - name: Show Docker images
+        run: docker images
